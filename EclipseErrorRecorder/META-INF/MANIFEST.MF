@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: EclipseErrorRecorder
 Bundle-SymbolicName: EclipseErrorRecorder;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: eclipseErrorRecorder.Activator
 Require-Bundle: org.eclipse.core.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: EclipseErrorRecorder
