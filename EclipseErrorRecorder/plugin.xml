@@ -12,5 +12,9 @@
             primary="true">
       </toc>
    </extension>
+   
+   <extension point="org.eclipse.ui.startup">
+       <startup class="eclipseErrorRecorder.Activator" />
+   </extension>
 
 </plugin>

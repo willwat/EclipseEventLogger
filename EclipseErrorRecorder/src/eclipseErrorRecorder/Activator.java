@@ -1,9 +1,10 @@
-package eclipseerrorrecorder;
+package eclipseErrorRecorder;
 
+import org.eclipse.ui.IStartup;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-public class Activator implements BundleActivator {
+public class Activator implements BundleActivator, IStartup {
 
 	private static BundleContext context;
 
@@ -25,6 +26,11 @@ public class Activator implements BundleActivator {
 	 */
 	public void stop(BundleContext bundleContext) throws Exception {
 		Activator.context = null;
+	}
+
+	@Override
+	public void earlyStartup() {
+		System.out.println("Hello");
 	}
 
 }
