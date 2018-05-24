@@ -3,6 +3,11 @@ package utilities;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IRegion;
+import org.eclipse.ui.console.IHyperlink;
+import org.eclipse.ui.console.TextConsole;
+
 public class GeneralUtils {
 	
 	public static String getUserMACAddress(){
@@ -24,6 +29,15 @@ public class GeneralUtils {
 		}
 		catch(Exception e) {
 			return "No MAC address found";
+		}
+	}
+	
+	public static String getHyperLinkTextFromConsole(IHyperlink link, TextConsole console) {
+		IRegion linkRegion = console.getRegion(link);
+		try {
+			return console.getDocument().get(linkRegion.getOffset(), linkRegion.getLength());
+		} catch (BadLocationException e) {
+			return "Hyperlink not found in given console.";
 		}
 	}
 	

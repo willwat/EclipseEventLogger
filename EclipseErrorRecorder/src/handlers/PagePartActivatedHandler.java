@@ -15,8 +15,7 @@ public class PagePartActivatedHandler implements IPartListener {
 		if(part instanceof ITextEditor) {
 			ITextEditor editor = (ITextEditor)part;
 			ISourceViewer sourceView = (ISourceViewer)((ITextEditor)editor).getAdapter(ITextOperationTarget.class);
-			sourceView.getAnnotationModel().addAnnotationModelListener((IAnnotationModelListener) new AnnotationModelChangedHandler());
-			
+			sourceView.getAnnotationModel().addAnnotationModelListener((IAnnotationModelListener) new AnnotationModelChangedHandler());	
 		}
 	}
 

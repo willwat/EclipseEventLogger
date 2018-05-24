@@ -1,5 +1,7 @@
 package utilities;
 
+import org.eclipse.jface.text.ITextOperationTarget;
+import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -24,4 +26,9 @@ public class EclipseTools {
 	public static ITextEditor getCurrentPageActiveEditor() {
 		return (ITextEditor) getCurrentWorkbenchPage().getActiveEditor();
 	}
+	
+	public static ISourceViewer getEditorSourceViewer(ITextEditor editor) {
+		return (ISourceViewer)editor.getAdapter(ITextOperationTarget.class);
+	}
+	
 }
