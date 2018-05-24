@@ -1,6 +1,7 @@
 package utilities;
 
 import handlers.AnnotationModelChangedHandler;
+import handlers.ConsoleAddedHandler;
 import handlers.PagePartActivatedHandler;
 
 public class ProjectSetup {
@@ -14,7 +15,7 @@ public class ProjectSetup {
 	}
 	
 	public static void setupListeningForRuntimeErrors() {
-		
+		EclipseTools.getConsoleManager().addConsoleListener(new ConsoleAddedHandler());
 	}
 	
 }

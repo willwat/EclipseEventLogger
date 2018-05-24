@@ -2,13 +2,14 @@ package handlers;
 
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleListener;
+import org.eclipse.ui.console.IOConsole;
 
 public class ConsoleAddedHandler implements IConsoleListener {
 
 	@Override
 	public void consolesAdded(IConsole[] consoles) {
-		// TODO Auto-generated method stub
-		
+		IOConsole lastConsole = (IOConsole)consoles[consoles.length-1];
+		lastConsole.addPropertyChangeListener(new ConsolePropertyChangeHandler());
 	}
 
 	@Override
