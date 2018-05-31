@@ -3,6 +3,8 @@
  */
 package main;
 
+import java.sql.SQLException;
+
 import org.eclipse.ui.IStartup;
 
 import utilities.ProjectSetup;
@@ -18,6 +20,7 @@ public class Main implements IStartup {
 	public void earlyStartup() {
 		ProjectSetup.setupListeningForSyntaxErrors();
 		ProjectSetup.setupListeningForRuntimeErrors();
+		database.DBSetup.buildDatabase();
 	}
 
 }
