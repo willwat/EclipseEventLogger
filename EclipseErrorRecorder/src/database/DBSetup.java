@@ -1,5 +1,6 @@
 package database;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
@@ -13,6 +14,7 @@ public class DBSetup {
 		ds.setServerName("localhost");
 		ds.setUser("root");
 		ds.setPassword("");
+		
 		
 		String createUserTable = "CREATE TABLE `tUser` (\r\n" + 
 				" `UserID` int(11) NOT NULL AUTO_INCREMENT,\r\n" + 
@@ -59,7 +61,46 @@ public class DBSetup {
 	}
 	
 	public static boolean isDBSetup() {
-		return true;
+		boolean result = false;
+		
+		MysqlDataSource ds = new MysqlDataSource();
+		ds.setDatabaseName("eclipseerrordb");
+		ds.setServerName("localhost");
+		ds.setUser("root");
+		ds.setPassword("");
+		
+		try {
+			 ResultSet rs = ds.getConnection().getMetaData().getTables(null, null, "t%", null);
+			 
+			 boolean tErrorFound = false;
+			 boolean tErrorTypeFound = false;
+			 boolean tUserFound = false;
+			 boolean tRecordingFound = false;
+			 
+			 while(rs.next()) {
+				String currentTableName = rs.getString(3);
+				
+				if(currentTableName.equals("tErrorType")) {
+					tErrorTypeFound = true;
+				}
+				if(currentTableName.equals("tError")) {
+					tErrorFound = true;
+				}
+				if(currentTableName.equals("tUser")) {
+					tUserFound = true;
+				}
+				if(currentTableName.equals("tRecording")) {
+					tRecordingFound = true;
+				}				
+			 }
+			 
+			 result = (tErrorTypeFound && tErrorFound && tUserFound && tRecordingFound) ? true : false;
+		 
+		} catch (SQLException e) {
+			return false;
+		}
+		
+		return result;
 	}
 
 }

@@ -21,6 +21,7 @@ public class Main implements IStartup {
 		ProjectSetup.setupListeningForSyntaxErrors();
 		ProjectSetup.setupListeningForRuntimeErrors();
 		database.DBSetup.buildDatabase();
+		database.DBSetup.isDBSetup();
 	}
 
 }
