@@ -94,7 +94,7 @@ public class DBSetup {
 				}				
 			 }
 			 
-			 result = (tErrorTypeFound && tErrorFound && tUserFound && tRecordingFound) ? true : false;
+			 result = (tErrorTypeFound && tErrorFound && tUserFound && tRecordingFound);
 		 
 		} catch (SQLException e) {
 			return false;
