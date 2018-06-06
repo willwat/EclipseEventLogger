@@ -4,21 +4,25 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import utilities.GeneralUtils;
 
 public class DBSetup {
+	
+	private final static String configFilePath = System.getProperty("user.home") + "\\EclipseErrorRecorderConfig\\config.txt";
+	private static MysqlDataSource databaseDS;
 
 	public static void buildDatabase() {
 
-		MysqlDataSource ds = new MysqlDataSource();
-		ds.setDatabaseName("eclipseerrordb");
-		ds.setServerName("localhost");
-		ds.setUser("root");
-		ds.setPassword("");
+		readConfigFile();
 		
+		System.out.println(databaseDS.getServerName());
+		System.out.println(databaseDS.getDatabaseName());
+		System.out.println(databaseDS.getUser());
+
 		
 		String createUserTable = "CREATE TABLE `tUser` (\r\n" + 
 				" `UserID` int(11) NOT NULL AUTO_INCREMENT,\r\n" + 
@@ -60,12 +64,27 @@ public class DBSetup {
 		
 	}
 	
-	public static Object readConfigFile() {
-		return new Object();
+	public static void readConfigFile() {
+		databaseDS = new MysqlDataSource();
+		String configFileText = GeneralUtils.getAllTextFromFile(configFilePath);
+		String[] configFileLines = configFileText.split(System.lineSeparator());
+		HashMap<String, String> databaseInfo = new HashMap<String,String>();
+		int configFileLineKey = 0;
+		int configFileLineValue = 1;
+		
+		for(String line : configFileLines) {
+			String[] lineParts = line.split("=");
+			databaseInfo.put(lineParts[configFileLineKey], lineParts[configFileLineValue]);
+		}
+		
+		databaseDS.setDatabaseName(databaseInfo.get("Server"));
+		databaseDS.setServerName(databaseInfo.get("Database"));
+		databaseDS.setUser(databaseInfo.get("Username"));
+		databaseDS.setPassword(databaseInfo.get("Password"));
 	}
 	
 	public static void createConfigFile() {
-		File configFile = new File(System.getProperty("user.home") + "\\EclipseErrorRecorderConfig\\config.txt");
+		File configFile = new File(configFilePath);
 		configFile.getParentFile().mkdirs();
 		
 		try {
@@ -78,20 +97,14 @@ public class DBSetup {
 	}
 	
 	public static boolean configFileExists() {
-		return new File(System.getProperty("user.home") + "\\EclipseErrorRecorderConfig\\config.txt").exists();
+		return new File(configFilePath).exists();
 	}
 	
 	public static boolean isDBSetup() {
 		boolean result = false;
 		
-		MysqlDataSource ds = new MysqlDataSource();
-		ds.setDatabaseName("eclipseerrordb");
-		ds.setServerName("localhost");
-		ds.setUser("root");
-		ds.setPassword("");
-		
 		try {
-			 ResultSet rs = ds.getConnection().getMetaData().getTables(null, null, "t%", null);
+			 ResultSet rs = databaseDS.getConnection().getMetaData().getTables(null, null, "t%", null);
 			 
 			 boolean tErrorFound = false;
 			 boolean tErrorTypeFound = false;

@@ -28,6 +28,8 @@ public class Main implements IStartup {
 			DBSetup.createConfigFile();
 		}
 		
+		DBSetup.buildDatabase();
+		
 	}
 
 }

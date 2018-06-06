@@ -1,6 +1,9 @@
 package utilities;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -51,6 +54,24 @@ public class GeneralUtils {
 		    printWriter.close();
 		}
 	    
+	}
+	
+	public static String getAllTextFromFile(String filePath) {
+		String fileText = "";
+		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(filePath));
+			
+			while(br.ready()) {
+				fileText += br.readLine() + System.lineSeparator();
+			}
+			
+			br.close();
+		} catch (IOException e) {
+			return "";
+		}
+		
+		return fileText;
 	}
 	
 	public static String getHyperLinkTextFromConsole(IHyperlink link, TextConsole console) {
