@@ -1,9 +1,13 @@
 package database;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
+
+import utilities.GeneralUtils;
 
 public class DBSetup {
 
@@ -58,6 +62,23 @@ public class DBSetup {
 	
 	public static Object readConfigFile() {
 		return new Object();
+	}
+	
+	public static void createConfigFile() {
+		File configFile = new File(System.getProperty("user.home") + "\\EclipseErrorRecorderConfig\\config.txt");
+		configFile.getParentFile().mkdirs();
+		
+		try {
+			configFile.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		GeneralUtils.writeToFile(configFile.getPath(), "Server=" + System.lineSeparator() + "Database=" + System.lineSeparator() + "Username=" + System.lineSeparator() + "Password=");
+	}
+	
+	public static boolean configFileExists() {
+		return new File(System.getProperty("user.home") + "\\EclipseErrorRecorderConfig\\config.txt").exists();
 	}
 	
 	public static boolean isDBSetup() {

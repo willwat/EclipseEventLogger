@@ -1,5 +1,9 @@
 package utilities;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 
@@ -30,6 +34,23 @@ public class GeneralUtils {
 		catch(Exception e) {
 			return "No MAC address found";
 		}
+	}
+	
+	public static void writeToFile(String filePath, String text) {
+		FileWriter fileWriter = null;
+		PrintWriter printWriter = null;
+		
+		try {
+			fileWriter = new FileWriter(filePath);
+			printWriter = new PrintWriter(fileWriter);
+		    printWriter.print(text);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+		    printWriter.close();
+		}
+	    
 	}
 	
 	public static String getHyperLinkTextFromConsole(IHyperlink link, TextConsole console) {

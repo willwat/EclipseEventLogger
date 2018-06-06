@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import org.eclipse.ui.IStartup;
 
+import database.DBSetup;
 import utilities.ProjectSetup;
 
 
@@ -20,8 +21,13 @@ public class Main implements IStartup {
 	public void earlyStartup() {
 		ProjectSetup.setupListeningForSyntaxErrors();
 		ProjectSetup.setupListeningForRuntimeErrors();
-		database.DBSetup.buildDatabase();
-		database.DBSetup.isDBSetup();
+		DBSetup.buildDatabase();
+		DBSetup.isDBSetup();
+		
+		if(!DBSetup.configFileExists()) {
+			DBSetup.createConfigFile();
+		}
+		
 	}
 
 }
