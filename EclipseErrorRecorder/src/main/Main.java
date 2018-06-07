@@ -21,15 +21,13 @@ public class Main implements IStartup {
 	public void earlyStartup() {
 		ProjectSetup.setupListeningForSyntaxErrors();
 		ProjectSetup.setupListeningForRuntimeErrors();
-		DBSetup.buildDatabase();
-		DBSetup.isDBSetup();
 		
 		if(!DBSetup.configFileExists()) {
 			DBSetup.createConfigFile();
 		}
-		
-		DBSetup.buildDatabase();
-		
+		else {
+			DBSetup.buildDatabase();
+		}
 	}
 
 }
