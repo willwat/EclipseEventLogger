@@ -1,6 +1,7 @@
 package handlers;
 
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.eclipse.jface.text.Position;
@@ -10,9 +11,13 @@ import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.IAnnotationModelListener;
 import org.eclipse.jface.text.source.IAnnotationModelListenerExtension;
 
+import database.DBUtils;
+import utilities.GeneralUtils;
+
 public class AnnotationModelChangedHandler implements IAnnotationModelListenerExtension, IAnnotationModelListener {
 
 	ArrayList<ArrayList<Object>> checkedAnnotationInfo;
+	private final int syntaxErrorTypeID = 2;
 	
 	public AnnotationModelChangedHandler() {
 		checkedAnnotationInfo = new ArrayList<ArrayList<Object>>();
@@ -29,10 +34,11 @@ public class AnnotationModelChangedHandler implements IAnnotationModelListenerEx
 			annotationInfo.add(annPos.getOffset());
 			
 			if(ann.getType().equals("org.eclipse.jdt.ui.error") && !checkedAnnotationInfo.contains(annotationInfo)) {
-				System.out.println("Annotation Info:\t" + "Text: " + ann.getText());
-				System.out.println("Annotation Position Info:\t" + "Length: " + annPos.getLength() + "\t" + "Offset: " + annPos.getOffset());
-				System.out.println();
-				checkedAnnotationInfo.add(annotationInfo);
+				try {
+					DBUtils.addRecordToDB(GeneralUtils.getUserMACAddress(), ann.getText(), syntaxErrorTypeID);
+				} catch (SQLException e) {
+					return;
+				}
 			}
 		}
 	}

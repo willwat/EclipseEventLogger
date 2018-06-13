@@ -15,15 +15,7 @@ import utilities.GeneralUtils;
 public class DBUtils {
 
 	private final static String configFilePath = System.getProperty("user.home") + "\\EclipseErrorRecorderConfig\\config.txt";
-	private static MysqlDataSource databaseDS = readConfigFileToDS();
-	
-	public static void setProjectDataSource(MysqlDataSource dataSource) {
-		databaseDS = dataSource;
-	}
-	
-	public static MysqlDataSource getProjectDataSource() {
-		return databaseDS;
-	}
+	private final static MysqlDataSource databaseDS = readConfigFileToDS();
 	
 	public static void addRecordToDB(String userMacAddress, String errorMessage, int errorTypeID) throws SQLException {
 		if(!macAddressInDB(userMacAddress)) {
@@ -127,15 +119,11 @@ public class DBUtils {
 		return databaseDS;
 	}
 	
-	public static void createConfigFile() {
+	public static void createConfigFile() throws IOException {
 		File configFile = new File(configFilePath);
-		configFile.getParentFile().mkdirs();
 		
-		try {
-			configFile.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		configFile.getParentFile().mkdirs();
+		configFile.createNewFile();
 		
 		GeneralUtils.writeToFile(configFile.getPath(), "Server=" + System.lineSeparator() + "Database=" + System.lineSeparator() + "Username=" + System.lineSeparator() + "Password=");
 	}

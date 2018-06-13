@@ -10,25 +10,17 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 
 public class DBSetup {
 	
-	private static MysqlDataSource databaseDS;
+	private final static MysqlDataSource databaseDS = DBUtils.readConfigFileToDS();
 
-	public static void buildDatabase() {
-		databaseDS = DBUtils.readConfigFileToDS();
-		
+	public static void buildDatabase() throws SQLException {		
 		if(isSafeToBuildDB() && !databaseDS.getUser().equals("") && !databaseDS.getDatabaseName().equals("") && !databaseDS.getServerName().equals("")) {
-			try {
-				createDBTables();
-			} 
-			catch (SQLException e) {
-				e.printStackTrace();
-			}	
+			createDBTables();
 		}
 	}
 	
-	public static boolean isSafeToBuildDB() {
+	public static boolean isSafeToBuildDB() throws SQLException {
 		boolean safeToBuildDB = false;
 		
-		try {
 			 ResultSet dbTables = databaseDS.getConnection().getMetaData().getTables(null, null, "t%", null);
 			 
 			 boolean tErrorFound = false;
@@ -37,7 +29,7 @@ public class DBSetup {
 			 boolean tRecordingFound = false;
 			 
 			 while(dbTables.next()) {
-				String currentTableName = dbTables.getString(3).toLowerCase();
+				String currentTableName = dbTables.getString("TABLE_NAME").toLowerCase();
 				
 				if(currentTableName.equals("tErrorType".toLowerCase())) {
 					tErrorTypeFound = true;
@@ -55,9 +47,6 @@ public class DBSetup {
 			 
 			 safeToBuildDB = !(tErrorTypeFound || tErrorFound || tUserFound || tRecordingFound);
 		 
-		} catch (SQLException e) {
-			return false;
-		}
 		
 		return safeToBuildDB;
 	}
@@ -110,7 +99,6 @@ public class DBSetup {
 		stmt.execute(createUserTable);
 		stmt.execute(createErrorTable);
 		stmt.execute(createRecordsTable);
-
 	}
 
 }

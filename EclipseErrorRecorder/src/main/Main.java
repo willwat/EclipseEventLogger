@@ -4,6 +4,7 @@
 package main;
 
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.eclipse.ui.IStartup;
@@ -20,22 +21,18 @@ public class Main implements IStartup {
 
 	@Override
 	public void earlyStartup() {
-		ProjectSetup.setupListeningForSyntaxErrors();
-		ProjectSetup.setupListeningForRuntimeErrors();
-		
-		if(!DBUtils.configFileExists()) {
-			DBUtils.createConfigFile();
-		}
-		else {
-			DBSetup.buildDatabase();
-		}
-		
 		try {
-			DBUtils.addRecordToDB("AEEE-3FG5-444-AAAA", "Your cat is a dog", 1);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if(!DBUtils.configFileExists()) {
+				DBUtils.createConfigFile();
+			}
+			else {
+				DBSetup.buildDatabase();
+				ProjectSetup.setupListeningForSyntaxErrors();
+				ProjectSetup.setupListeningForRuntimeErrors();
+			}
+		}
+		catch(IOException | SQLException e) {
+			System.exit(0);
 		}
 	}
-
 }
