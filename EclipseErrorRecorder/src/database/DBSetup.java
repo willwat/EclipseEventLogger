@@ -12,10 +12,32 @@ public class DBSetup {
 	
 	private final static MysqlDataSource databaseDS = DBUtils.readConfigFileToDS();
 
-	public static void buildDatabase() throws SQLException {		
+	public static void buildDatabase() throws SQLException {
+		if(!databaseExists()) {
+			createDatabase();
+		}
 		if(isSafeToBuildDB() && !databaseDS.getUser().equals("") && !databaseDS.getDatabaseName().equals("") && !databaseDS.getServerName().equals("")) {
 			createDBTables();
 		}
+	}
+	
+	public static boolean databaseExists() throws SQLException {
+		ResultSet databases = databaseDS.getConnection().getMetaData().getCatalogs();
+		int databaseColumnNum = 1;
+		
+		while(databases.next()) {
+			if(databases.getString(databaseColumnNum).toLowerCase().equals(databaseDS.getDatabaseName().toLowerCase())) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public static void createDatabase() throws SQLException {
+		Statement stmt = databaseDS.getConnection().createStatement();
+		String createDatabaseQuery = "CREATE DATABASE " + databaseDS.getDatabaseName();
+		stmt.executeQuery(createDatabaseQuery);
 	}
 	
 	public static boolean isSafeToBuildDB() throws SQLException {
