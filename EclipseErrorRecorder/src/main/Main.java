@@ -32,7 +32,8 @@ public class Main implements IStartup {
 			}
 		}
 		catch(IOException | SQLException e) {
-			System.exit(0);
+			e.printStackTrace();
+			return;	
 		}
 	}
 }

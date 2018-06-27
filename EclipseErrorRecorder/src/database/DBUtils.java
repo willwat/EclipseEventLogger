@@ -14,56 +14,56 @@ import utilities.GeneralUtils;
 
 public class DBUtils {
 
-	private final static String configFilePath = System.getProperty("user.home") + "\\EclipseErrorRecorderConfig\\config.txt";
+	private final static String configFilePath = System.getProperty("user.home") + "\\EclipseEventLogConfig\\config.txt";
 	private final static MysqlDataSource databaseDS = readConfigFileToDS();
 	
-	public static void addRecordToDB(String userMacAddress, String errorMessage, int errorTypeID) throws SQLException {
+	public static void addRecordToDB(String userMacAddress, String eventMessage, int eventTypeID) throws SQLException {
 		if(!macAddressInDB(userMacAddress)) {
 			addMacAddressToDB(userMacAddress);
 		}
-		if(!isErrorInDB(errorMessage, errorTypeID)) {
-			addErrorToDB(errorMessage, errorTypeID);
+		if(!isEventInDB(eventMessage, eventTypeID)) {
+			addEventToDB(eventMessage, eventTypeID);
 		}
 		
 		int userID = getUserID(userMacAddress);
-		int errorID = getErrorID(errorMessage, errorTypeID);
+		int eventID = getEventID(eventMessage, eventTypeID);
 		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 		
-		PreparedStatement pStmt = databaseDS.getConnection().prepareStatement("INSERT INTO `trecord`(`UserID`, `ErrorID`, `TimeOfRecording`) VALUES (?, ?, ?)");
+		PreparedStatement pStmt = databaseDS.getConnection().prepareStatement("INSERT INTO `trecord`(`UserID`, `EventID`, `TimeOfRecording`) VALUES (?, ?, ?)");
 		
 		pStmt.setInt(1, userID);
-		pStmt.setInt(2, errorID);
+		pStmt.setInt(2, eventID);
 		pStmt.setTimestamp(3, currentTimestamp);
 		
 		pStmt.execute();
 	}
 	
-	public static boolean isErrorInDB(String errorMsg, int errorTypeID) throws SQLException {
-		boolean isErrorInDB = false;
+	public static boolean isEventInDB(String eventMsg, int eventTypeID) throws SQLException {
+		boolean isEventInDB = false;
 		
-		PreparedStatement pStmt = databaseDS.getConnection().prepareStatement("Select * From tError where Message = ? and ErrorTypeID = ?");
-		pStmt.setString(1, errorMsg);
-		pStmt.setInt(2, errorTypeID);
+		PreparedStatement pStmt = databaseDS.getConnection().prepareStatement("Select * From tEvent where Message = ? and EventTypeID = ?");
+		pStmt.setString(1, eventMsg);
+		pStmt.setInt(2, eventTypeID);
 		
 		ResultSet rs = pStmt.executeQuery();
 		
-		isErrorInDB = rs.isBeforeFirst();
+		isEventInDB = rs.isBeforeFirst();
 		
-		return isErrorInDB;
+		return isEventInDB;
 	}
 	
-	public static void addErrorToDB(String errorMsg, int errorTypeID) throws SQLException {
-		PreparedStatement pStmt = databaseDS.getConnection().prepareStatement("INSERT INTO `tError`(`Message`, ErrorTypeID) VALUES (?, ?)");
-		pStmt.setString(1, errorMsg);
-		pStmt.setInt(2, errorTypeID);
+	public static void addEventToDB(String eventMsg, int eventTypeID) throws SQLException {
+		PreparedStatement pStmt = databaseDS.getConnection().prepareStatement("INSERT INTO `tEvent`(`Message`, EventTypeID) VALUES (?, ?)");
+		pStmt.setString(1, eventMsg);
+		pStmt.setInt(2, eventTypeID);
 		pStmt.execute();
 	}
 	
-	public static int getErrorID(String errorMsg, int errorTypeID) throws SQLException {
+	public static int getEventID(String eventMsg, int eventTypeID) throws SQLException {
 		int firstColumn = 1;
-		PreparedStatement pStmt = databaseDS.getConnection().prepareStatement("Select ErrorID From tError where Message = ? and ErrorTypeID = ?");
-		pStmt.setString(1, errorMsg);
-		pStmt.setInt(2, errorTypeID);
+		PreparedStatement pStmt = databaseDS.getConnection().prepareStatement("Select EventID From tEvent where Message = ? and EventTypeID = ?");
+		pStmt.setString(1, eventMsg);
+		pStmt.setInt(2, eventTypeID);
 		ResultSet queryResults = pStmt.executeQuery();
 		queryResults.next();
 		return queryResults.getInt(firstColumn);
@@ -125,7 +125,7 @@ public class DBUtils {
 		configFile.getParentFile().mkdirs();
 		configFile.createNewFile();
 		
-		GeneralUtils.writeToFile(configFile.getPath(), "Server=" + System.lineSeparator() + "Database=" + System.lineSeparator() + "Username=" + System.lineSeparator() + "Password=");
+		GeneralUtils.writeToFile(configFile.getPath(), "Server=localhost" + System.lineSeparator() + "Database=EclipseEventLog" + System.lineSeparator() + "Username=EclipseEventLogUser" + System.lineSeparator() + "Password=P@ssword");
 	}
 	
 	public static boolean configFileExists() {

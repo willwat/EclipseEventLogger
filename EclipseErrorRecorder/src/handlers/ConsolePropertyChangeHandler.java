@@ -30,6 +30,7 @@ public class ConsolePropertyChangeHandler implements IPropertyChangeListener {
 				try {
 					DBUtils.addRecordToDB(userMacAddress, errorMessage, runtimeErrorTypeID);
 				} catch (SQLException e) {
+					e.printStackTrace();
 					return;
 				}
 			}
