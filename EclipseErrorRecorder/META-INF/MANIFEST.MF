@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EclipseErrorRecorder
-Bundle-SymbolicName: EclipseErrorRecorder;singleton:=true
+Bundle-SymbolicName: EclipseEventLogger;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.equinox.ds;bundle-version="1.5.0",
