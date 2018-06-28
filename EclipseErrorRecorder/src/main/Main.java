@@ -25,11 +25,9 @@ public class Main implements IStartup {
 			if(!DBUtils.configFileExists()) {
 				DBUtils.createConfigFile();
 			}
-			else {
-				DBSetup.buildDatabase();
-				ProjectSetup.setupListeningForSyntaxErrors();
-				ProjectSetup.setupListeningForRuntimeErrors();
-			}
+			DBSetup.buildDatabase();
+			ProjectSetup.setupListeningForSyntaxEvents();
+			ProjectSetup.setupListeningForRuntimeEvents();
 		}
 		catch(IOException | SQLException e) {
 			e.printStackTrace();

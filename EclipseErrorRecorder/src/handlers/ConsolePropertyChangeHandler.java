@@ -12,7 +12,7 @@ import utilities.GeneralUtils;
 
 public class ConsolePropertyChangeHandler implements IPropertyChangeListener {
 	
-	private final int runtimeErrorTypeID = 1;
+	private final int runtimeEventTypeID = 1;
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
@@ -20,15 +20,15 @@ public class ConsolePropertyChangeHandler implements IPropertyChangeListener {
 		IHyperlink[] links = console.getHyperlinks();
 		
 		String userMacAddress = "";
-		String errorMessage = "";
+		String eventMessage = "";
 		
 		for(IHyperlink link : links) {
 			if(link.getClass().getSimpleName().equals("JavaExceptionHyperLink")) {
-				errorMessage = GeneralUtils.getHyperLinkTextFromConsole(link, console);
+				eventMessage = GeneralUtils.getHyperLinkTextFromConsole(link, console);
 				userMacAddress = GeneralUtils.getUserMACAddress();
 				
 				try {
-					DBUtils.addRecordToDB(userMacAddress, errorMessage, runtimeErrorTypeID);
+					DBUtils.addRecordToDB(userMacAddress, eventMessage, runtimeEventTypeID);
 				} catch (SQLException e) {
 					e.printStackTrace();
 					return;

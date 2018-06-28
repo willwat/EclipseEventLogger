@@ -6,7 +6,7 @@ import handlers.PagePartActivatedHandler;
 
 public class ProjectSetup {
 	
-	public static void setupListeningForSyntaxErrors() {
+	public static void setupListeningForSyntaxEvents() {
 		if(EclipseTools.getCurrentPageActiveEditor() != null) {
 			EclipseTools.getEditorSourceViewer(EclipseTools.getCurrentPageActiveEditor()).getAnnotationModel().addAnnotationModelListener(new AnnotationModelChangedHandler());
 		}
@@ -14,7 +14,7 @@ public class ProjectSetup {
 		EclipseTools.getWorkbench().getWorkbenchWindows()[0].getPages()[0].addPartListener(new PagePartActivatedHandler());
 	}
 	
-	public static void setupListeningForRuntimeErrors() {
+	public static void setupListeningForRuntimeEvents() {
 		EclipseTools.getConsoleManager().addConsoleListener(new ConsoleAddedHandler());
 	}
 	

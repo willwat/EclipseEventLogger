@@ -17,7 +17,7 @@ import utilities.GeneralUtils;
 public class AnnotationModelChangedHandler implements IAnnotationModelListenerExtension, IAnnotationModelListener {
 
 	private ArrayList<ArrayList<Object>> checkedAnnotationInfo;
-	private final int syntaxErrorTypeID = 2;
+	private final int syntaxEventTypeID = 2;
 	
 	public AnnotationModelChangedHandler() {
 		checkedAnnotationInfo = new ArrayList<ArrayList<Object>>();
@@ -34,7 +34,7 @@ public class AnnotationModelChangedHandler implements IAnnotationModelListenerEx
 			
 			if(ann.getType().equals("org.eclipse.jdt.ui.error") && !checkedAnnotationInfo.contains(annotationInfo)) {
 				try {
-					DBUtils.addRecordToDB(GeneralUtils.getUserMACAddress(), ann.getText(), syntaxErrorTypeID);
+					DBUtils.addRecordToDB(GeneralUtils.getUserMACAddress(), ann.getText(), syntaxEventTypeID);
 					checkedAnnotationInfo.add(annotationInfo);
 				} 
 				catch (SQLException e) {

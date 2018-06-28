@@ -13,7 +13,7 @@ public class DBSetup {
 	private final static MysqlDataSource databaseDS = DBUtils.readConfigFileToDS();
 
 	public static void buildDatabase() throws SQLException {
-		if(!databaseExists()) {
+		if(!databaseExists() && !databaseDS.getDatabaseName().equals("")) {
 			createDatabase();
 		}
 		if(isSafeToBuildDB() && !databaseDS.getUser().equals("") && !databaseDS.getDatabaseName().equals("") && !databaseDS.getServerName().equals("")) {
@@ -22,22 +22,31 @@ public class DBSetup {
 	}
 	
 	public static boolean databaseExists() throws SQLException {
+		boolean result = false;
+		String databaseName = databaseDS.getDatabaseName();
+		databaseDS.setDatabaseName("");
+		
 		ResultSet databases = databaseDS.getConnection().getMetaData().getCatalogs();
 		int databaseColumnNum = 1;
 		
 		while(databases.next()) {
-			if(databases.getString(databaseColumnNum).toLowerCase().equals(databaseDS.getDatabaseName().toLowerCase())) {
-				return true;
+			if(databases.getString(databaseColumnNum).toLowerCase().equals(databaseName.toLowerCase())) {
+				result = true;
+				break;
 			}
 		}
 		
-		return false;
+		databaseDS.setDatabaseName(databaseName);
+		return result;
 	}
 	
 	public static void createDatabase() throws SQLException {
+		String databaseName = databaseDS.getDatabaseName();
+		databaseDS.setDatabaseName("");
 		Statement stmt = databaseDS.getConnection().createStatement();
-		String createDatabaseQuery = "CREATE DATABASE " + databaseDS.getDatabaseName();
-		stmt.executeQuery(createDatabaseQuery);
+		String createDatabaseQuery = "CREATE DATABASE " + databaseName;
+		stmt.executeUpdate(createDatabaseQuery);
+		databaseDS.setDatabaseName(databaseName);
 	}
 	
 	public static boolean isSafeToBuildDB() throws SQLException {
