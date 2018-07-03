@@ -104,7 +104,7 @@ public class DBSetup {
 		
 		String createEventTable = "CREATE TABLE `tEvent` (\r\n" + 
 				" `EventID` int(11) NOT NULL AUTO_INCREMENT,\r\n" + 
-				" `Message` varchar(100) NOT NULL,\r\n" + 
+				" `Message` varchar(200) NOT NULL,\r\n" + 
 				" `EventTypeID` int(11) NOT NULL,\r\n" + 
 				" PRIMARY KEY (`EventID`),\r\n" + 
 				" UNIQUE KEY `EventNK` (`Message`,`EventTypeID`) USING BTREE,\r\n" + 
