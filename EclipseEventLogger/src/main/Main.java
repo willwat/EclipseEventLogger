@@ -21,7 +21,7 @@ public class Main implements IStartup {
 
 	@Override
 	public void earlyStartup() {
-		try {
+		try {			
 			if(!DBUtils.configFileExists()) {
 				DBUtils.createConfigFile();
 			}
@@ -30,8 +30,7 @@ public class Main implements IStartup {
 			ProjectSetup.setupListeningForRuntimeEvents();
 		}
 		catch(IOException | SQLException e) {
-			e.printStackTrace();
-			return;	
+			e.printStackTrace();	
 		}
 	}
 }

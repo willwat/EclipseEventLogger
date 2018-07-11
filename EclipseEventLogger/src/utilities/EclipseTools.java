@@ -24,7 +24,11 @@ public class EclipseTools {
 	}
 	
 	public static ITextEditor getCurrentPageActiveEditor() {
-		return (ITextEditor) getCurrentWorkbenchPage().getActiveEditor();
+		if(getCurrentWorkbenchPage().getActiveEditor() instanceof ITextEditor) {
+			return (ITextEditor) getCurrentWorkbenchPage().getActiveEditor();
+		}else {
+			return null;
+		}
 	}
 	
 	public static ISourceViewer getEditorSourceViewer(ITextEditor editor) {
