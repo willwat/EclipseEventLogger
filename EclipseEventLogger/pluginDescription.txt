@@ -14,7 +14,7 @@ Username=MysqlUsername
 Password=MysqlPassword
 
 The ordering of the each piece of information is not important; however, each
-piece must be separated by a new line.
+piece must be separated by a new line. The Mysql user will need permission to create tables.
 Assuming the given account has the permission the database will
 be created if it has not already been. From here all runtime
 and syntax events will be logged in the database.

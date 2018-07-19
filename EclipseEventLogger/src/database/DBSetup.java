@@ -13,10 +13,12 @@ public class DBSetup {
 	private final static MysqlDataSource databaseDS = DBUtils.readConfigFileToDS();
 
 	public static void buildDatabase() throws SQLException {
-		if(!databaseExists() && !databaseDS.getDatabaseName().equals("")) {
+		final boolean DBInfoBlank = databaseDS.getUser().equals("") || databaseDS.getDatabaseName().equals("") || databaseDS.getServerName().equals("");
+		
+		if(!databaseExists() && !DBInfoBlank) {
 			createDatabase();
 		}
-		if(isSafeToBuildDB() && !databaseDS.getUser().equals("") && !databaseDS.getDatabaseName().equals("") && !databaseDS.getServerName().equals("")) {
+		if(isSafeToBuildDB() && !DBInfoBlank) {
 			createDBTables();
 		}
 	}
@@ -37,6 +39,7 @@ public class DBSetup {
 		}
 		
 		databaseDS.setDatabaseName(databaseName);
+		
 		return result;
 	}
 	

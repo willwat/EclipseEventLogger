@@ -2,6 +2,7 @@ package database;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +25,7 @@ public class DBUtils {
 		if(!isEventInDB(eventMessage, eventTypeID)) {
 			addEventToDB(eventMessage, eventTypeID);
 		}
-		
+
 		int userID = getUserID(userMacAddress);
 		int eventID = getEventID(eventMessage, eventTypeID);
 		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
@@ -36,6 +37,10 @@ public class DBUtils {
 		pStmt.setTimestamp(3, currentTimestamp);
 		
 		pStmt.execute();
+	}
+	
+	public static Connection getDBConnection() throws SQLException {
+		return databaseDS.getConnection();
 	}
 	
 	public static boolean isEventInDB(String eventMsg, int eventTypeID) throws SQLException {
@@ -111,10 +116,15 @@ public class DBUtils {
 			databaseInfo.put(lineParts[configFileLineKey], (lineParts.length > 1) ? lineParts[configFileLineValue] : "");
 		}
 		
-		databaseDS.setDatabaseName(databaseInfo.get("Database"));
-		databaseDS.setServerName(databaseInfo.get("Server"));
-		databaseDS.setUser(databaseInfo.get("Username"));
-		databaseDS.setPassword(databaseInfo.get("Password"));
+		try {
+			databaseDS.setUseSSL(false);
+			databaseDS.setDatabaseName(databaseInfo.get("Database"));
+			databaseDS.setServerName(databaseInfo.get("Server"));
+			databaseDS.setUser(databaseInfo.get("Username"));
+			databaseDS.setPassword(databaseInfo.get("Password"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		return databaseDS;
 	}
