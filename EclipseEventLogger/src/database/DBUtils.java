@@ -30,7 +30,7 @@ public class DBUtils {
 		int eventID = getEventID(eventMessage, eventTypeID);
 		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 		
-		PreparedStatement pStmt = databaseDS.getConnection().prepareStatement("INSERT INTO `trecord`(`UserID`, `EventID`, `TimeOfRecording`) VALUES (?, ?, ?)");
+		PreparedStatement pStmt = databaseDS.getConnection().prepareStatement("INSERT INTO `tRecord`(`UserID`, `EventID`, `TimeOfRecording`) VALUES (?, ?, ?)");
 		
 		pStmt.setInt(1, userID);
 		pStmt.setInt(2, eventID);

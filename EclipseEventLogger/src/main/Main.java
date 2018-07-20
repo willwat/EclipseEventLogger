@@ -21,7 +21,7 @@ public class Main implements IStartup {
 
 	@Override
 	public void earlyStartup() {
-		try {			
+		try {		
 			if(!DBUtils.configFileExists()) {
 				DBUtils.createConfigFile();
 			}
