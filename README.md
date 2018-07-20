@@ -3,7 +3,7 @@
 # Getting Started
 1. Install Mysql and Eclipse(Oxygen or higher) on to your computer.
 
-2. For easy configuration, create a Mysql user named EclipseEventLogUser with a password of P@ssword, and give that user permissions to create schemas/tables.
+2. For easy configuration, create a Mysql user named EclipseEventLog with a password of P@ssword, and give that user permissions to create schemas/tables.
 
 3. In Eclipse, click help at the top menu and then install new software.
 
