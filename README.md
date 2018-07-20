@@ -10,7 +10,7 @@
 
 <li> Click to add button at the upper right corner.</li>
 
-<li> In the location text box input "http://homepages.uc.edu/~watsonwd/EventLogger/" without the quotes and click ok.</li>
+<li> In the location text box input "http://homepages.uc.edu/~watsonwd/EclipseEventLog/" without the quotes and click ok.</li>
 
 <li> Check EclipseEventLogger and continue with the install.</li>
 
