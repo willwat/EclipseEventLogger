@@ -135,7 +135,7 @@ public class DBUtils {
 		configFile.getParentFile().mkdirs();
 		configFile.createNewFile();
 		
-		GeneralUtils.writeToFile(configFile.getPath(), "Server=localhost" + System.lineSeparator() + "Database=EclipseEventLog" + System.lineSeparator() + "Username=EclipseEventLogUser" + System.lineSeparator() + "Password=P@ssword");
+		GeneralUtils.writeToFile(configFile.getPath(), "Server=localhost" + System.lineSeparator() + "Database=EclipseEventLog" + System.lineSeparator() + "Username=EclipseEventLog" + System.lineSeparator() + "Password=P@ssword");
 	}
 	
 	public static boolean configFileExists() {
