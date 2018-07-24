@@ -1,6 +1,7 @@
 package database;
 
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,6 +12,7 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 public class DBSetup {
 	
 	private final static MysqlDataSource databaseDS = DBUtils.readConfigFileToDS();
+	private static Connection DBConnection;
 
 	public static void buildDatabase() throws SQLException {
 		final boolean DBInfoBlank = databaseDS.getUser().equals("") || databaseDS.getDatabaseName().equals("") || databaseDS.getServerName().equals("");
@@ -21,14 +23,17 @@ public class DBSetup {
 		if(isSafeToBuildDB() && !DBInfoBlank) {
 			createDBTables();
 		}
+		
+		DBUtils.setDBConnection(DBConnection);
 	}
 	
 	public static boolean databaseExists() throws SQLException {
 		boolean result = false;
 		String databaseName = databaseDS.getDatabaseName();
 		databaseDS.setDatabaseName("");
+		DBConnection = databaseDS.getConnection();
 		
-		ResultSet databases = databaseDS.getConnection().getMetaData().getCatalogs();
+		ResultSet databases = DBConnection.getMetaData().getCatalogs();
 		int databaseColumnNum = 1;
 		
 		while(databases.next()) {
@@ -39,6 +44,7 @@ public class DBSetup {
 		}
 		
 		databaseDS.setDatabaseName(databaseName);
+		DBConnection = databaseDS.getConnection();
 		
 		return result;
 	}
@@ -46,17 +52,19 @@ public class DBSetup {
 	public static void createDatabase() throws SQLException {
 		String databaseName = databaseDS.getDatabaseName();
 		databaseDS.setDatabaseName("");
-		Statement stmt = databaseDS.getConnection().createStatement();
+		DBConnection = databaseDS.getConnection();
+		Statement stmt = DBConnection.createStatement();
 		String createDatabaseQuery = "CREATE DATABASE " + databaseName;
 		stmt.executeUpdate(createDatabaseQuery);
 		databaseDS.setDatabaseName(databaseName);
+		DBConnection = databaseDS.getConnection();
 	}
 	
 	public static boolean isSafeToBuildDB() throws SQLException {
 		boolean safeToBuildDB = false;
 		
 		
-		ResultSet dbTables = databaseDS.getConnection().getMetaData().getTables(databaseDS.getDatabaseName(), null, "t%", null);
+		ResultSet dbTables = DBConnection.getMetaData().getTables(databaseDS.getDatabaseName(), null, "t%", null);
 		 
 		boolean tEventFound = false;
 		boolean tEventTypeFound = false;
@@ -112,22 +120,23 @@ public class DBSetup {
 				" PRIMARY KEY (`EventID`),\r\n" + 
 				" UNIQUE KEY `EventNK` (`Message`,`EventTypeID`) USING BTREE,\r\n" + 
 				" KEY `EventTypeID_FK` (`EventTypeID`),\r\n" + 
-				" CONSTRAINT `EventTypeID_FK` FOREIGN KEY (`EventTypeID`) REFERENCES `teventtype` (`EventTypeID`) ON DELETE CASCADE ON UPDATE CASCADE\r\n" + 
+				" CONSTRAINT `EventTypeID_FK` FOREIGN KEY (`EventTypeID`) REFERENCES `tEventType` (`EventTypeID`) ON DELETE CASCADE ON UPDATE CASCADE\r\n" + 
 				") ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1";
 		
 		String createRecordsTable = "CREATE TABLE `tRecord` (\r\n" + 
 				" `RecordID` int(11) NOT NULL AUTO_INCREMENT,\r\n" + 
 				" `UserID` int(11) NOT NULL,\r\n" + 
 				" `EventID` int(11) NOT NULL,\r\n" + 
-				" `TimeOfRecording` TIMESTAMP NOT NULL,\r\n" +
-				" PRIMARY KEY (`RecordID`),\r\n" + 
+				" `TimeOfRecording` DATETIME(3) NOT NULL,\r\n" +
+				" PRIMARY KEY (`RecordID`),\r\n" +
+				" UNIQUE KEY `RecordNK` (`UserID`, `TimeOfRecording`),\r\n" +
 				" KEY `UserID_FK` (`UserID`),\r\n" + 
 				" KEY `EventID_FK` (`EventID`),\r\n" + 
-				" CONSTRAINT `EventID_FK` FOREIGN KEY (`EventID`) REFERENCES `tevent` (`EventID`) ON DELETE CASCADE ON UPDATE CASCADE,\r\n" + 
-				" CONSTRAINT `UserID_FK` FOREIGN KEY (`UserID`) REFERENCES `tuser` (`UserID`) ON DELETE CASCADE ON UPDATE CASCADE\r\n" + 
+				" CONSTRAINT `EventID_FK` FOREIGN KEY (`EventID`) REFERENCES `tEvent` (`EventID`) ON DELETE CASCADE ON UPDATE CASCADE,\r\n" + 
+				" CONSTRAINT `UserID_FK` FOREIGN KEY (`UserID`) REFERENCES `tUser` (`UserID`) ON DELETE CASCADE ON UPDATE CASCADE\r\n" + 
 				") ENGINE=InnoDB DEFAULT CHARSET=latin1";
 		
-		Statement stmt = databaseDS.getConnection().createStatement();
+		Statement stmt = DBConnection.createStatement();
 		
 		stmt.execute(createEventTypeTable);
 		stmt.execute(addEventTypes);
