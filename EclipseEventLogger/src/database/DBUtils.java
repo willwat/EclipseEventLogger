@@ -52,7 +52,7 @@ public class DBUtils {
 	public static void addRecordToDB(String userMacAddress, String eventMessage, int eventTypeID, String fileName) throws SQLException {
 		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 		
-		PreparedStatement pStmt = DBConnection.prepareStatement("INSERT INTO `tRecordDW`(`userMacAddress`, `eventMessage`, `TimeOfRecording`, `eventTypeID`, `fileName`) VALUES (?, ?, ?)");
+		PreparedStatement pStmt = DBConnection.prepareStatement("INSERT INTO `tRecordDW`(`userMacAddress`, `eventMessage`, `TimeOfRecording`, `eventTypeID`, `fileName`) VALUES (?, ?, ?, ?, ?)");
 		
 		pStmt.setString(1, userMacAddress);
 		pStmt.setString(2, eventMessage);
