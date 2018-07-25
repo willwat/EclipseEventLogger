@@ -11,6 +11,7 @@ import org.eclipse.ui.IStartup;
 
 import database.DBSetup;
 import database.DBUtils;
+import utilities.EclipseTools;
 import utilities.ProjectSetup;
 
 /**

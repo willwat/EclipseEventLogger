@@ -12,6 +12,7 @@ import org.eclipse.jface.text.source.IAnnotationModelListener;
 import org.eclipse.jface.text.source.IAnnotationModelListenerExtension;
 
 import database.DBUtils;
+import utilities.EclipseTools;
 import utilities.GeneralUtils;
 
 public class AnnotationModelChangedHandler implements IAnnotationModelListenerExtension, IAnnotationModelListener {
@@ -34,7 +35,9 @@ public class AnnotationModelChangedHandler implements IAnnotationModelListenerEx
 			
 			if(ann.getType().equals("org.eclipse.jdt.ui.error") && !checkedAnnotationInfo.contains(annotationInfo)) {
 				try {
-					DBUtils.addRecordToDB(GeneralUtils.getUserMACAddress(), ann.getText(), syntaxEventTypeID);
+					String classFileName = EclipseTools.getCurrentPageActiveEditor().getEditorInput().getName();
+					//DBUtils.addRecordToDB(GeneralUtils.getUserMACAddress(), ann.getText(), syntaxEventTypeID);
+					DBUtils.addRecordToDB(GeneralUtils.getUserMACAddress(), ann.getText(), syntaxEventTypeID, classFileName);
 					checkedAnnotationInfo.add(annotationInfo);
 				} 
 				catch (SQLException e) {

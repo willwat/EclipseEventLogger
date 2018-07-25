@@ -8,6 +8,7 @@ import org.eclipse.ui.console.IHyperlink;
 import org.eclipse.ui.console.IOConsole;
 
 import database.DBUtils;
+import utilities.EclipseTools;
 import utilities.GeneralUtils;
 
 public class ConsolePropertyChangeHandler implements IPropertyChangeListener {
@@ -21,14 +22,18 @@ public class ConsolePropertyChangeHandler implements IPropertyChangeListener {
 		
 		String userMacAddress = "";
 		String eventMessage = "";
+		String classFileName = "";
 		
 		for(IHyperlink link : links) {
 			if(link.getClass().getSimpleName().equals("JavaExceptionHyperLink")) {
 				eventMessage = GeneralUtils.getHyperLinkTextFromConsole(link, console);
 				userMacAddress = GeneralUtils.getUserMACAddress();
+				classFileName = EclipseTools.getCurrentPageActiveEditor().getEditorInput().getName();
+
 				
 				try {
-					DBUtils.addRecordToDB(userMacAddress, eventMessage, runtimeEventTypeID);
+					//DBUtils.addRecordToDB(userMacAddress, eventMessage, runtimeEventTypeID);
+					DBUtils.addRecordToDB(userMacAddress, eventMessage, runtimeEventTypeID, classFileName);
 				} catch (SQLException e) {
 					e.printStackTrace();
 					return;
