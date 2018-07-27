@@ -32,6 +32,7 @@ public class DBSetup {
 		String databaseName = databaseDS.getDatabaseName();
 		databaseDS.setDatabaseName("");
 		DBConnection = databaseDS.getConnection();
+		databaseDS.setDatabaseName(databaseName);
 		
 		ResultSet databases = DBConnection.getMetaData().getCatalogs();
 		int databaseColumnNum = 1;
@@ -39,12 +40,10 @@ public class DBSetup {
 		while(databases.next()) {
 			if(databases.getString(databaseColumnNum).toLowerCase().equals(databaseName.toLowerCase())) {
 				result = true;
+				DBConnection = databaseDS.getConnection();
 				break;
 			}
 		}
-		
-		databaseDS.setDatabaseName(databaseName);
-		DBConnection = databaseDS.getConnection();
 		
 		return result;
 	}
@@ -60,6 +59,47 @@ public class DBSetup {
 		DBConnection = databaseDS.getConnection();
 	}
 	
+	public static void createDBTables() throws SQLException {
+		String createRecordDWTable = "CREATE TABLE `tRecordDW` (\r\n" + 
+				"  `recordDWID` int(11) NOT NULL AUTO_INCREMENT,\r\n" + 
+				"  `userMACAddress` varchar(20) NOT NULL,\r\n" + 
+				"  `eventMessage` varchar(500) NOT NULL,\r\n" + 
+				"  `timeOfRecording` datetime(3) NOT NULL,\r\n" + 
+				"  `eventTypeID` int(5) NOT NULL,\r\n" + 
+				"  `fileName` varchar(500) NOT NULL,\r\n" + 
+				"  `problemCode` varchar(500),\r\n" + 
+				"  `lineNumber` int(5),\r\n" + 
+				"  PRIMARY KEY (`recordDWID`),\r\n" + 
+				"  UNIQUE KEY `RecordNK` (`userMACAddress`,`timeOfRecording`,`eventMessage`)\r\n" + 
+				") ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;";
+		
+		Statement stmt = DBConnection.createStatement();
+		
+		stmt.execute(createRecordDWTable);
+	}
+	
+	public static boolean isSafeToBuildDB() throws SQLException {
+		
+		ResultSet dbTables = DBConnection.getMetaData().getTables(databaseDS.getDatabaseName(), null, "t%", null);
+		 
+		boolean tRecordDWFound = false;
+		 
+		while(dbTables.next()) {
+			String currentTableName = dbTables.getString("TABLE_NAME").toLowerCase();
+			
+			if(currentTableName.equals("tRecordDW".toLowerCase())) {
+				tRecordDWFound = true;
+				break;
+			}				
+		}
+		 
+		return !tRecordDWFound;
+	}
+	
+	
+	/* 
+	 * Code for the normalized database.
+	 *  
 	public static boolean isSafeToBuildDB() throws SQLException {
 		boolean safeToBuildDB = false;
 		
@@ -143,6 +183,6 @@ public class DBSetup {
 		stmt.execute(createUserTable);
 		stmt.execute(createEventTable);
 		stmt.execute(createRecordsTable);
-	}
+	}*/
 
 }

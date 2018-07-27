@@ -49,16 +49,18 @@ public class DBUtils {
 	 * @param fileName File source file where the event was generated. User is probably editing this file.
 	 * @throws SQLException
 	 */
-	public static void addRecordToDB(String userMacAddress, String eventMessage, int eventTypeID, String fileName) throws SQLException {
+	public static void addRecordToDB(String userMacAddress, String eventMessage, int eventTypeID, String fileName, String problemCode, int lineNumber) throws SQLException {
 		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 		
-		PreparedStatement pStmt = DBConnection.prepareStatement("INSERT INTO `tRecordDW`(`userMacAddress`, `eventMessage`, `TimeOfRecording`, `eventTypeID`, `fileName`) VALUES (?, ?, ?, ?, ?)");
+		PreparedStatement pStmt = DBConnection.prepareStatement("INSERT INTO `tRecordDW`(`userMacAddress`, `eventMessage`, `TimeOfRecording`, `eventTypeID`, `fileName`, `problemCode`, `lineNumber`) VALUES (?, ?, ?, ?, ?, ?, ?)");
 		
 		pStmt.setString(1, userMacAddress);
 		pStmt.setString(2, eventMessage);
 		pStmt.setTimestamp(3, currentTimestamp);
 		pStmt.setInt(4, eventTypeID);
 		pStmt.setString(5, fileName);
+		pStmt.setString(6, problemCode);
+		pStmt.setInt(7, lineNumber);
 		
 		pStmt.execute();
 	}
