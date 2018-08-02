@@ -45,8 +45,6 @@ public class AnnotationModelChangedHandler implements IAnnotationModelListenerEx
 					String classFileName = EclipseTools.getCurrentPageActiveEditor().getEditorInput().getName();
 					String problemCode = doc.get(lineInfo.getOffset(), lineInfo.getLength()).trim();
 					
-					
-					//DBUtils.addRecordToDB(GeneralUtils.getUserMACAddress(), ann.getText(), syntaxEventTypeID);
 					DBUtils.addRecordToDB(GeneralUtils.getUserMACAddress(), ann.getText(), syntaxEventTypeID, classFileName, problemCode, lineNumber);
 					checkedAnnotationInfo.add(annotationInfo);					
 				} 
@@ -58,6 +56,7 @@ public class AnnotationModelChangedHandler implements IAnnotationModelListenerEx
 		}		
 	}
 
+	// Required method implementation that is not used.
 	@Override
 	public void modelChanged(IAnnotationModel model) {
 		

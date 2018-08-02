@@ -57,7 +57,6 @@ public class ConsolePropertyChangeHandler implements IPropertyChangeListener {
 						continue;
 					}
 					
-					//DBUtils.addRecordToDB(userMacAddress, eventMessage, runtimeEventTypeID);
 					DBUtils.addRecordToDB(userMacAddress, eventMessage, runtimeEventTypeID, classFileName, problemCode, lineNumber);
 				} 
 				catch (SQLException e) {
