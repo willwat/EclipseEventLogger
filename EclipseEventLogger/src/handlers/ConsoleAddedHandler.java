@@ -14,8 +14,7 @@ public class ConsoleAddedHandler implements IConsoleListener {
 
 	@Override
 	public void consolesRemoved(IConsole[] consoles) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 }

@@ -65,7 +65,7 @@ public class DBSetup {
 				"  `userMACAddress` varchar(20) NOT NULL,\r\n" + 
 				"  `eventMessage` varchar(500) NOT NULL,\r\n" + 
 				"  `timeOfRecording` datetime(3) NOT NULL,\r\n" + 
-				"  `eventTypeID` int(5) NOT NULL,\r\n" + 
+				"  `eventType` varchar(10) NOT NULL,\r\n" + 
 				"  `fileName` varchar(500) NOT NULL,\r\n" + 
 				"  `problemCode` varchar(500),\r\n" + 
 				"  `lineNumber` int(5),\r\n" + 

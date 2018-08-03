@@ -18,7 +18,7 @@ import utilities.GeneralUtils;
 
 public class ConsolePropertyChangeHandler implements IPropertyChangeListener {
 	
-	private final int runtimeEventTypeID = 1;
+	private final String runtimeEventType = "Runtime";
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
@@ -57,7 +57,7 @@ public class ConsolePropertyChangeHandler implements IPropertyChangeListener {
 						continue;
 					}
 					
-					DBUtils.addRecordToDB(userMacAddress, eventMessage, runtimeEventTypeID, classFileName, problemCode, lineNumber);
+					DBUtils.addRecordToDB(userMacAddress, eventMessage, runtimeEventType, classFileName, problemCode, lineNumber);
 				} 
 				catch (SQLException e) {
 					e.printStackTrace();

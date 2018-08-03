@@ -21,7 +21,7 @@ import utilities.GeneralUtils;
 public class AnnotationModelChangedHandler implements IAnnotationModelListenerExtension, IAnnotationModelListener {
 
 	private ArrayList<ArrayList<Object>> checkedAnnotationInfo;
-	private final int syntaxEventTypeID = 2;
+	private final String syntaxEventType = "Syntax";
 	
 	public AnnotationModelChangedHandler() {
 		checkedAnnotationInfo = new ArrayList<ArrayList<Object>>();
@@ -45,7 +45,7 @@ public class AnnotationModelChangedHandler implements IAnnotationModelListenerEx
 					String classFileName = EclipseTools.getCurrentPageActiveEditor().getEditorInput().getName();
 					String problemCode = doc.get(lineInfo.getOffset(), lineInfo.getLength()).trim();
 					
-					DBUtils.addRecordToDB(GeneralUtils.getUserMACAddress(), ann.getText(), syntaxEventTypeID, classFileName, problemCode, lineNumber);
+					DBUtils.addRecordToDB(GeneralUtils.getUserMACAddress(), ann.getText(), syntaxEventType, classFileName, problemCode, lineNumber);
 					checkedAnnotationInfo.add(annotationInfo);					
 				} 
 				catch (SQLException | BadLocationException e) {
